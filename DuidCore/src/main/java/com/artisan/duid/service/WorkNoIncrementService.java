@@ -1,5 +1,7 @@
 package com.artisan.duid.service;
 
+import com.artisan.duid.entity.WorkNoTagEnum;
+
 /**
  *
  * @author xz man
@@ -18,5 +20,5 @@ public interface WorkNoIncrementService {
      * 方法描述: 获取到唯一业务主键
      *
      */
-    long generator(String workNoTag);
+    long generator(WorkNoTagEnum workNoTag);
 }

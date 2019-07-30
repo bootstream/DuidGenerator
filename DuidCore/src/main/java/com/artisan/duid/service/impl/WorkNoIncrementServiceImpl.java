@@ -1,6 +1,7 @@
 package com.artisan.duid.service.impl;
 
 import com.artisan.duid.entity.WorkNoIncrementEntity;
+import com.artisan.duid.entity.WorkNoTagEnum;
 import com.artisan.duid.service.WorkNoIncrementService;
 import org.springframework.stereotype.Service;
 
@@ -59,10 +60,11 @@ public class WorkNoIncrementServiceImpl implements WorkNoIncrementService {
      * 方法描述: 获取到唯一业务主键
      */
     @Override
-    public long generator(String workNoTag) {
+    public long generator(WorkNoTagEnum workNoTag) {
         if(null == workNoTag || "".equals(workNoTag)){
             throw new IllegalArgumentException("获取唯一主键时，业务标签不可为空。");
         }
+        this.getWorkNoIncrement(workNoTag);
 
         return 0;
     }
@@ -75,26 +77,28 @@ public class WorkNoIncrementServiceImpl implements WorkNoIncrementService {
      * 方法描述: 获取到自增对象
      *
      */
-    private WorkNoIncrementEntity getWorkNoIncrement(String workNoTag){
+    private WorkNoIncrementEntity getWorkNoIncrement(WorkNoTagEnum workNoTag){
 
         //获取到自增仓库
         Map<String, WorkNoIncrementEntity> storage = getStoage();
-        synchronized (workNoTag.intern()){
+        synchronized (workNoTag.getTag().intern()){
             //获取到
-            WorkNoIncrementEntity inc = storage.get(workNoTag);
+            WorkNoIncrementEntity inc = storage.get(workNoTag.getTag());
 
         }
         return null;
     }
 
-    private WorkNoIncrementEntity buildInc(String workNoTag){
+    private WorkNoIncrementEntity buildInc(WorkNoTagEnum workNoTag){
         WorkNoIncrementEntity inc = new WorkNoIncrementEntity();
         //业务主键标签
-        inc.setWorkNoTag(workNoTag);
+        inc.setWorkNoTag(workNoTag.getTag());
+        //描述信息
+        inc.setDescribeInfo(workNoTag.getDescribeInfo());
         //初始值
-        inc.setCurrentMaxNo(DEFAULT_START_NO);
+        inc.setCurrentMaxNo(workNoTag.getStartNo());
         //设置默认步长
-        inc.setDefaultStep(DEFAULT_STEP);
+        inc.setDefaultStep(workNoTag.getStep());
         //当前时间
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         //设置创建时间

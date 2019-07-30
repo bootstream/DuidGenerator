@@ -18,7 +18,7 @@ public class WorkNoIncrementEntity {
     /**
      * 主键
      */
-    private Long id;
+    private Short id;
 
     /**
      * 业务主键标签
